@@ -1,0 +1,41 @@
+
+h1 {
+  font-size: 80px;
+  line-height: 60px;
+}
+span {
+  display: block;
+  font-size: 18px;
+  line-height: 30px;
+}
+.container {
+  width: 80%;
+  max-width: 1600px;
+  margin: auto;
+}
+ 
+.px-spc-b-20 {
+  padding-bottom: 20px;
+}
+.go-home {
+  padding: 10px 20px;
+  background: #ffa000;
+  border: transparent;
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgb(0 0 0 / 30%);
+  cursor: pointer;
+  margin: 20px 0;
+  color: #fff;
+  text-decoration: none;
+}
+.go-home:hover{
+  opacity: 0.7;
+}
+
+.go-home i {
+  color: #fff;
+}
+img {
+  display: block;
+  width: 100%;
+}

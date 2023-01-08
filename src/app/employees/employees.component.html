@@ -1,0 +1,40 @@
+<div class="text-center">
+  <h1>Employees</h1>
+</div>
+
+<!-- <button (click)="toggle()">Employees</button> -->
+
+<div>
+  <button (click)="addEmp()" class="btn btn-primary m-2">Add</button>
+</div>
+<!-- <div [hidden]="hideEmployees" class="p-4"> -->
+<div class="p-4">
+  <!-- <div *ngIf="employees?.availableE !== undefined $$ employees?.availableE > 0"> -->
+
+  <div class="border rounded shadow" style="overflow: auto;">
+    <table class="full-width-table table">
+      <tr style="border-bottom: 1px solid silver;">
+        <th class="p-4">Id</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      <tr *ngFor="let employee of employeeList; let i=index; let e = even;"  style="border-bottom: 1px solid silver; padding: 5px, auto" ngClass="e? even: odd">
+        <td class="p-3">{{employee.Eid }}</td>
+        <td>{{employee.Ename | uppercase}}</td>
+        <td>{{companyList[(employee.companyId - 1)].name }}</td>
+        <td>{{departmentList[(employee.departmentId - 1)].name }}</td>
+        <td>{{salaryList[(employee.salaryId - 1)].amount | currency }}</td>
+        <td>{{employee.regDate | date : 'short'}}</td>
+        <td><button (click)="editEmp(employee)" class="btn btn-primary btn-text-primary">Edit</button></td>
+        <td><button (click)="deleteEmp(employee.Eid)" class="btn btn-primary text-red">Delete</button></td>
+      </tr>
+
+    </table>
+
+  </div>
+</div>
