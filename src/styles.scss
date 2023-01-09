@@ -46,8 +46,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .even{
-  background-color: steelblue;
-  color: white;
+  background-color: whitesmoke;
 }
 
- 
+.border-botom{
+  border-bottom: 1px solid silver;
+}
+
+.border-blue{
+  border-color: blue;
+} 
+
+.width-full{
+  width: 100%;
+}
+
+.h-2{
+  height: 40px;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+

@@ -2,18 +2,70 @@
   <h1>Employees</h1>
 </div>
 
-<!-- <button (click)="toggle()">Employees</button> -->
-
-<div>
-  <button (click)="addEmp()" class="btn btn-primary m-2">Add</button>
-</div>
-<!-- <div [hidden]="hideEmployees" class="p-4"> -->
 <div class="p-4">
-  <!-- <div *ngIf="employees?.availableE !== undefined $$ employees?.availableE > 0"> -->
+
+  <div class="alert alert-success text-center cursor-pointer" *ngIf="successAlert === true" (click)="hideAlert()">
+    <h2>Data add successfully</h2>
+  </div>
+
+  <div class="alert alert-success text-center cursor-pointer" *ngIf="updateAlert === true" (click)="hideAlert()">
+    <h2>Data updated successfully</h2>
+  </div>
+  
+  <div class="alert alert-success text-center cursor-pointer" *ngIf="deleteAlert === true" (click)="hideAlert()">
+    <h2>Data deleted successfully</h2>
+  </div>
+  
+  <p>{{newemp | json}}</p>
+
+  <div class="flex" *ngIf="hideNewEmp === true">
+
+    <form (ngSubmit)="updateE? updateEmp():addEmp()">
+      <div class="form-group">
+        <input class="form-control" type="number" required name="Eid" [(ngModel)]="newemp.Eid" placeholder="id">
+        <input class="form-control" type="text" required name="Ename" [(ngModel)]="newemp.Ename" placeholder="name">
+        <input class="form-control" type="number" required name="companyId" [(ngModel)]="newemp.companyId"
+          placeholder="name">
+        <input class="form-control" type="number" required name="departmentId" [(ngModel)]="newemp.departmentId"
+          placeholder="name">
+        <input class="form-control" type="number" required name="salaryId" [(ngModel)]="newemp.salaryId"
+          placeholder="salary">
+        <!-- <select name="companyId" id="companyId" required class="form-control cursor-pointer">
+          <option value="0" disabled selected>Select Company</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+        <select name="departmentId" required id="departmentId" class="form-control cursor-pointer">
+          <option value="0" disabled selected>Select Department</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select> -->
+      </div>
+      <div *ngIf="!updateE">
+        <button class="btn btn-primary" type="submit">Add</button>
+      </div>
+      <div *ngIf="updateE">
+        <button class="btn btn-primary" type="submit">Update</button>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="flex justify-right">
+    <button (click)="newEmpForm()" class="btn btn-primary px-3 m-2">New</button>
+  </div>
+
+  <div>
+    <input type="text" placeholder="search..." class="full-width-table rounded border-blue" style="height: 40px;">
+  </div>
 
   <div class="border rounded shadow" style="overflow: auto;">
     <table class="full-width-table table">
-      <tr style="border-bottom: 1px solid silver;">
+      <tr class="border-botom">
         <th class="p-4">Id</th>
         <th>Name</th>
         <th>Company</th>
@@ -23,7 +75,8 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
-      <tr *ngFor="let employee of employeeList; let i=index; let e = even;"  style="border-bottom: 1px solid silver; padding: 5px, auto" ngClass="e? even: odd">
+      <tr *ngFor="let employee of employeeList; let i=index; let e = even;" class="border-botom py-4"
+        [ngClass]="e? 'even': 'odd'">
         <td class="p-3">{{employee.Eid }}</td>
         <td>{{employee.Ename | uppercase}}</td>
         <td>{{companyList[(employee.companyId - 1)].name }}</td>

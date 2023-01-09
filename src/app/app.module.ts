@@ -24,6 +24,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { HttpClientModule } from '@angular/common/http';
 import { EmployeesService } from './employees/services/employees.service';
+import { NewEmployeeComponent } from './employees/new-employee/new-employee.component';
+import { FormsModule } from '@angular/forms';
+import { ViewService } from './view.service';
 
 
 @NgModule({
@@ -35,7 +38,7 @@ import { EmployeesService } from './employees/services/employees.service';
     SalaryComponent,
     CompanyComponent,
     NavBarComponent,
-    
+    NewEmployeeComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,8 +56,9 @@ import { EmployeesService } from './employees/services/employees.service';
     MatSortModule,
     HttpClientInMemoryWebApiModule.forRoot(DataService),
     HttpClientModule,
+    FormsModule
   ],
-  providers: [EmployeesService],
+  providers: [ViewService, EmployeesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

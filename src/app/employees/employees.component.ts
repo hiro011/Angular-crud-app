@@ -1,7 +1,7 @@
+import { EmployeeList } from 'src/app/data-model';
 import { Component, OnInit } from '@angular/core';
-import { EmployeeList } from './employees';
 import { EmployeesService } from './services/employees.service';
-import { JsonPipe } from '@angular/common';
+import { ViewService } from '../view.service';
 
 // interface myData {
 //   obj: Object
@@ -12,57 +12,94 @@ import { JsonPipe } from '@angular/common';
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss'],
 })
-export class EmployeesComponent implements OnInit{
+export class EmployeesComponent implements OnInit {
 
-  hideEmployees = false;
+  successAlert = false;
+  updateAlert = false;
+  deleteAlert = false;
+  hideNewEmp = true;
+  updateE = false;
 
-  employeeList1 : EmployeeList[] = [];
+  employeeList1: EmployeeList[] = [];
   employeeList: any[] = [];
   companyList: any[] = [];
   departmentList: any[] = [];
   salaryList: any[] = [];
 
-  constructor(private employeesService: EmployeesService) {}
+  constructor(
+    private viewService: ViewService,
+    private employeesService: EmployeesService,
+    // private newEmloyee: NewEmployeeComponent,
+  ) { }
 
-  ngOnInit(): void{
-    this.employeesService.getEmployees().subscribe((data: any) =>{
-      console.log("we got", data);
+  ngOnInit(): void {
+    this.viewService.getEmployees().subscribe((data: any) => {
       this.employeeList = data;
     });
-    this.employeesService.getCompany().subscribe((data: any) =>{
-      console.log("we got", data);
+    this.viewService.getCompany().subscribe((data: any) => {
       this.companyList = data;
     });
-    this.employeesService.getDepartment().subscribe((data: any) =>{
-      console.log("we got", data);
+    this.viewService.getDepartment().subscribe((data: any) => {
       this.departmentList = data;
     });
-    this.employeesService.getSalary().subscribe((data: any) =>{
-      console.log("we got", data);
+    this.viewService.getSalary().subscribe((data: any) => {
       this.salaryList = data;
     });
-    // this.employeeList = this.employeesService.getEmployees()
   }
 
-  toggle() {
-    this.hideEmployees = !this.hideEmployees;
+  hideAlert() {
+    this.successAlert = false;
+    this.updateAlert = false;
+    this.deleteAlert = false;
   }
-  addEmp(){
-    const emp: EmployeeList = {
-      Eid: 8,
-      Ename: 'aliseid',
-      companyId: 1,
-      departmentId: 2,
-      salaryId: 1,
-      regDate: new Date('07-jan-2023'),
-    };
+
+  newEmpForm() {
+    this.hideNewEmp = !this.hideNewEmp;
+    this.updateE = false;
+  }
+
+  newemp: EmployeeList = {
+    Eid: 0,
+    Ename: '',
+    companyId: 0,
+    departmentId: 0,
+    salaryId: 0,
+    regDate: new Date('07-jan-2023'),
+  };
+
+  addEmp() {
     // this.employeeList.push(emp);
-    this.employeeList = [...this.employeeList, emp];
+    
+    this.employeesService.creatEmployees(this.newemp)
+      .subscribe((ret) => {
+        console.log("ret data", ret)
+        this.employeeList = [...this.employeeList, ret];
+      })
+    this.successAlert = true
+    this.newEmpForm()
   }
-  editEmp(emp: any){
-    window.alert(emp.Ename)
+  editEmp(emp: EmployeeList) {
+
+    this.newemp = emp;
+    this.hideNewEmp = true;
+    this.updateE = true;
   }
-  deleteEmp(id : number){
-    window.alert(id)
+  deleteEmp(id: number) {
+    this.employeesService.deleteEmployee(id)
+    .subscribe((ret)=>{
+      console.log("deleted ret: ", ret)
+    })
+    this.deleteAlert = true
+    // window.alert(id)
+  }
+  updateEmp() {
+    this.employeesService.updateEmployee(this.newemp)
+    .subscribe((ret)=>{
+      console.log("ret updated: ", ret)
+    })
+
+    // this.employeeList = [...this.employeeList, this.newemp];
+    this.updateAlert = true
+    this.newEmpForm()
   }
 }

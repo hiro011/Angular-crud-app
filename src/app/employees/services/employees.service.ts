@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EmployeeList } from 'src/app/data-model';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 // interface myData {
 //   obj: Array<Object>
@@ -12,23 +13,14 @@ export class EmployeesService {
 
   SERVER_URL: string = "http://localhost:8080/api/";
   constructor(private http: HttpClient) { }
-
-  getEmployees() {
-    // return this.employeeList
-    // return this.http.get<myData>('/api/file.php')
-    // return this.http.get<myData>('http://localhost:1234/api/file.php')
-    return this.http.get(this.SERVER_URL + 'employee')
+ 
+  creatEmployees(employee : EmployeeList) {
+    return this.http.post(`${this.SERVER_URL + 'employee'}`, employee)
   }
-  getCompany() {
-    return this.http.get(this.SERVER_URL + 'company')
+  deleteEmployee(Eid: number){
+    return this.http.delete(`${this.SERVER_URL + 'employee'}/${Eid}`)
   }
-  getDepartment() {
-    return this.http.get(this.SERVER_URL + 'department')
-  }
-  getSalary() {
-    return this.http.get(this.SERVER_URL + 'salary')
-  }
-  creatEmployees() {
-
+  updateEmployee(employee: EmployeeList){
+    return this.http.put(`${this.SERVER_URL + 'employee'}/${employee.Eid}`, employee)
   }
 }

@@ -16,10 +16,12 @@ export class DataService implements InMemoryDbService {
       { id: 4, name: 'company4', regDate: new Date('08-jan-2023') },
     ];
     let department = [
-      { id: 1, name: 'department1', regDate: new Date('08-jan-2023') },
-      { id: 2, name: 'department2', regDate: new Date('08-jan-2023') },
-      { id: 3, name: 'department3', regDate: new Date('08-jan-2023') },
-      { id: 4, name: 'department4', regDate: new Date('08-jan-2023') },
+      { id: 1, name: 'department1', companyId: 1, regDate: new Date('08-jan-2023') },
+      { id: 2, name: 'department2', companyId: 1, regDate: new Date('08-jan-2023') },
+      { id: 3, name: 'department3', companyId: 2, regDate: new Date('08-jan-2023') },
+      { id: 4, name: 'department4', companyId: 2, regDate: new Date('08-jan-2023') },
+      { id: 5, name: 'department5', companyId: 3, regDate: new Date('08-jan-2023') },
+      { id: 6, name: 'department6', companyId: 3, regDate: new Date('08-jan-2023') },
     ];
     let salary = [
       { id: 1, amount: 500, regDate: new Date('08-jan-2023') },
@@ -40,7 +42,7 @@ export class DataService implements InMemoryDbService {
         Eid: 2,
         Ename: 'mehamed',
         companyId: 2,
-        departmentId: 2,
+        departmentId: 3,
         salaryId: 1,
         regDate: new Date('06-jan-2023'),
       },
@@ -56,7 +58,7 @@ export class DataService implements InMemoryDbService {
         Eid: 4,
         Ename: 'yesuf',
         companyId: 2,
-        departmentId: 1,
+        departmentId: 4,
         salaryId: 2,
         regDate: new Date('06-jan-2023'),
       }
