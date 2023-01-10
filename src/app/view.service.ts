@@ -1,3 +1,4 @@
+import { EmployeeList } from './employees/employees';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -6,22 +7,19 @@ import { Injectable } from '@angular/core';
 })
 export class ViewService {
 
-  SERVER_URL: string = "http://localhost:8080/api/";
+  SERVER_URL: string = "http://localhost:4200/api/";
   constructor(private http: HttpClient) { }
 
   getEmployees() {
-    // return this.employeeList
-    // return this.http.get<myData>('/api/file.php')
-    // return this.http.get<myData>('http://localhost:1234/api/file.php')
-    return this.http.get(this.SERVER_URL + 'employee')
+    return this.http.get(this.SERVER_URL + 'employees');
   }
   getCompany() {
-    return this.http.get(this.SERVER_URL + 'company')
+    return this.http.get(this.SERVER_URL + 'companies')
   }
   getDepartment() {
-    return this.http.get(this.SERVER_URL + 'department')
+    return this.http.get(this.SERVER_URL + 'departments')
   }
   getSalary() {
-    return this.http.get(this.SERVER_URL + 'salary')
+    return this.http.get(this.SERVER_URL + 'salaries')
   }
 }

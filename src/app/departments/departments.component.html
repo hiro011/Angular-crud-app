@@ -1,26 +1,85 @@
-<div class="mat-elevation-z8">
-  <table mat-table class="full-width-table" matSort aria-label="Elements">
-    <!-- Id Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{row.id}}</td>
-    </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{row.name}}</td>
-    </ng-container>
+<div class="text-center m-2">
+  <h1>Companies</h1>
+</div>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+<div class="p-4">
 
-  <mat-paginator #paginator
-      [length]="dataSource?.data?.length"
-      [pageIndex]="0"
-      [pageSize]="5"
-      [pageSizeOptions]="[5, 10, 20]"
-      aria-label="Select page">
-  </mat-paginator>
+  <div class="m-3" *ngIf="hideNew === false">
+    <form [formGroup]="addFrom" (ngSubmit)="add()" class="border p-3 rounded">
+      <div>
+        <div class="form-group">
+          <div class="form-group col-5">
+            <label for="">Name</label>
+            <input class="form-control" type="text" required formControlName="name" placeholder="name"
+              [ngClass]="{'is-invalid' : submitted && ctrl['name'].errors}">
+
+            <div class="invalid-feedback" *ngIf="submitted && ctrl['name'].errors">
+              <div *ngIf="ctrl['name'].errors['required']">
+                Name is required!
+              </div>
+
+              <div *ngIf="ctrl['name'].errors['minlength']">
+                Minimum Name length allowed is 3 char!
+              </div>
+
+              <div *ngIf="ctrl['name'].errors['maxlength']">
+                Maximum Name length allowed is 100 char!
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group col-5">
+            <label for="">Company</label>
+            <select title="Company" formControlName="companyId" required class="form-control cursor-pointer"
+              [ngClass]="{'is-invalid' : submitted && ctrl['companyId'].errors}">
+              <option value="0" disabled selected>--select company--</option>
+              <option *ngFor="let cmp of companyList" [value]="cmp.id">
+                {{ cmp.name }}
+              </option>
+            </select>
+
+            <div class="invalid-feedback" *ngIf="submitted && ctrl['companyId'].errors">
+                Company is required!
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary px-2 m-2" type="submit">{{buttonTxt}}</button>
+          <button class="btn btn-danger px-2" type="button" (click)="resetForm()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-right">
+    <button (click)="hideNewForm()" class="btn btn-primary px-3 m-2">New</button>
+  </div>
+  <div>
+    <input type="text" placeholder="search..." class="full-width-table rounded border-blue" style="height: 40px;">
+  </div>
+  <div class="border rounded shadow" style="overflow: auto;">
+    <table class="full-width-table table">
+      <tr class="border-botom">
+        <th class="p-4">Id</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      <tr *ngFor="let department of departmentList; let i=index; let e = even;" class="border-botom py-4"
+        [ngClass]="e? 'even': 'odd'">
+        <td class="p-3">{{department.id }}</td>
+        <td>{{department.name | uppercase}}</td>
+        <td>{{department.companyId }}</td>
+        <td>{{department.regDate | date : 'short'}}</td>
+        <td><button (click)="edit(department.id)" class="btn btn-primary btn-text-primary">Edit</button></td>
+        <td><button (click)="delete(department.id)" class="btn btn-primary text-red">Delete</button></td>
+      </tr>
+
+    </table>
+
+  </div>
 </div>

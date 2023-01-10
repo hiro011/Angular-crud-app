@@ -2,6 +2,7 @@ import { DataService } from './data.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesComponent } from './employees/employees.component';
@@ -24,9 +25,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { HttpClientModule } from '@angular/common/http';
 import { EmployeesService } from './employees/services/employees.service';
-import { NewEmployeeComponent } from './employees/new-employee/new-employee.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewService } from './view.service';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -38,7 +39,6 @@ import { ViewService } from './view.service';
     SalaryComponent,
     CompanyComponent,
     NavBarComponent,
-    NewEmployeeComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,9 +54,11 @@ import { ViewService } from './view.service';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    HttpClientInMemoryWebApiModule.forRoot(DataService),
     HttpClientModule,
-    FormsModule
+    HttpClientInMemoryWebApiModule.forRoot(DataService),
+    FormsModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot()
   ],
   providers: [ViewService, EmployeesService],
   bootstrap: [AppComponent]

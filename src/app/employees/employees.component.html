@@ -1,62 +1,109 @@
-<div class="text-center">
+<div class="text-center m-2">
   <h1>Employees</h1>
 </div>
 
 <div class="p-4">
 
-  <div class="alert alert-success text-center cursor-pointer" *ngIf="successAlert === true" (click)="hideAlert()">
-    <h2>Data add successfully</h2>
-  </div>
+  <div class="m-3" *ngIf="hideNew === false">
+    <form [formGroup]="addFrom" (ngSubmit)="addEmp()" class="border p-3 rounded">
+      <div>
+        <div class="form-group">
+          <div class="row">
+            <!-- <div class="form-group col-5">
+              <label for="">ID</label>
+              <input type="number" class="form-control" required formControlName="id" placeholder="id"
+                [ngClass]="{'is-invalid' : submitted && ctrl['id'].errors}">
 
-  <div class="alert alert-success text-center cursor-pointer" *ngIf="updateAlert === true" (click)="hideAlert()">
-    <h2>Data updated successfully</h2>
-  </div>
-  
-  <div class="alert alert-success text-center cursor-pointer" *ngIf="deleteAlert === true" (click)="hideAlert()">
-    <h2>Data deleted successfully</h2>
-  </div>
-  
-  <p>{{newemp | json}}</p>
+              <div class="invalid-feedback" *ngIf="submitted && ctrl['id'].errors">
+                <div *ngIf="ctrl['id'].errors['required']">
+                  id is required!
+                </div>
 
-  <div class="flex" *ngIf="hideNewEmp === true">
+                <div *ngIf="ctrl['id'].errors['min']">
+                  Minimum id is 1!
+                </div>
+              </div>
+            </div> -->
 
-    <form (ngSubmit)="updateE? updateEmp():addEmp()">
-      <div class="form-group">
-        <input class="form-control" type="number" required name="Eid" [(ngModel)]="newemp.Eid" placeholder="id">
-        <input class="form-control" type="text" required name="Ename" [(ngModel)]="newemp.Ename" placeholder="name">
-        <input class="form-control" type="number" required name="companyId" [(ngModel)]="newemp.companyId"
-          placeholder="name">
-        <input class="form-control" type="number" required name="departmentId" [(ngModel)]="newemp.departmentId"
-          placeholder="name">
-        <input class="form-control" type="number" required name="salaryId" [(ngModel)]="newemp.salaryId"
-          placeholder="salary">
-        <!-- <select name="companyId" id="companyId" required class="form-control cursor-pointer">
-          <option value="0" disabled selected>Select Company</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-        <select name="departmentId" required id="departmentId" class="form-control cursor-pointer">
-          <option value="0" disabled selected>Select Department</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select> -->
-      </div>
-      <div *ngIf="!updateE">
-        <button class="btn btn-primary" type="submit">Add</button>
-      </div>
-      <div *ngIf="updateE">
-        <button class="btn btn-primary" type="submit">Update</button>
+            <div class="form-group col-5">
+              <label for="">Name</label>
+              <input class="form-control" type="text" required formControlName="Ename" placeholder="name"
+                [ngClass]="{'is-invalid' : submitted && ctrl['Ename'].errors}">
+
+              <div class="invalid-feedback" *ngIf="submitted && ctrl['Ename'].errors">
+                <div *ngIf="ctrl['Ename'].errors['required']">
+                  Name is required!
+                </div>
+
+                <div *ngIf="ctrl['Ename'].errors['minlength']">
+                  Minimum Name length allowed is 3 char!
+                </div>
+
+                <div *ngIf="ctrl['Ename'].errors['maxlength']">
+                  Maximum Name length allowed is 50 char!
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-5">
+              <label for="">Company</label>
+              <select title="Company" formControlName="companyId" required class="form-control cursor-pointer"
+                [ngClass]="{'is-invalid' : submitted && ctrl['companyId'].errors}">
+                <option value="0" disabled selected>--select company--</option>
+                <option *ngFor="let cmp of companyList" [value]="cmp.id">
+                  {{ cmp.name }}
+                </option>
+              </select>
+
+              <div class="invalid-feedback" *ngIf="submitted && ctrl['companyId'].errors">
+                  Company is required!
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-5">
+              <label for="">Department</label>
+              <select formControlName="departmentId" required title="Department" class="form-control cursor-pointer"
+                [ngClass]="{'is-invalid' : submitted && ctrl['departmentId'].errors}">
+                <option value="0" disabled selected>--select department--</option>
+                <option *ngFor="let dmp of departmentList" [value]="dmp.id">
+                  {{ dmp.name }}
+                </option>
+              </select>
+
+              <div class="invalid-feedback" *ngIf="submitted && ctrl['departmentId'].errors">
+                  Department is required!
+              </div>
+            </div>
+
+            <div class="form-group col-5">
+              <label for="">Salary</label>
+              <select formControlName="salaryId" required title="Salary" class="form-control cursor-pointer"
+                [ngClass]="{'is-invalid' : submitted && ctrl['salaryId'].errors}">
+                <option value="0" disabled selected>--select salary--</option>
+                <option *ngFor="let sal of salaryList" [value]="sal.id">
+                  {{ sal.amount | currency}}
+                </option>
+              </select>
+
+              <div class="invalid-feedback" *ngIf="submitted && ctrl['salaryId'].errors">
+                  Salary is required!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary px-2 m-2" type="submit">{{buttonTxt}}</button>
+          <button class="btn btn-danger px-2" type="button" (click)="resetForm()">Cancel</button>
+        </div>
       </div>
     </form>
-
   </div>
 
   <div class="flex justify-right">
-    <button (click)="newEmpForm()" class="btn btn-primary px-3 m-2">New</button>
+    <button (click)="hideNewForm()" class="btn btn-primary px-3 m-2">New</button>
   </div>
 
   <div>
@@ -77,14 +124,14 @@
       </tr>
       <tr *ngFor="let employee of employeeList; let i=index; let e = even;" class="border-botom py-4"
         [ngClass]="e? 'even': 'odd'">
-        <td class="p-3">{{employee.Eid }}</td>
+        <td class="p-3">{{employee.id }}</td>
         <td>{{employee.Ename | uppercase}}</td>
         <td>{{companyList[(employee.companyId - 1)].name }}</td>
         <td>{{departmentList[(employee.departmentId - 1)].name }}</td>
         <td>{{salaryList[(employee.salaryId - 1)].amount | currency }}</td>
         <td>{{employee.regDate | date : 'short'}}</td>
-        <td><button (click)="editEmp(employee)" class="btn btn-primary btn-text-primary">Edit</button></td>
-        <td><button (click)="deleteEmp(employee.Eid)" class="btn btn-primary text-red">Delete</button></td>
+        <td><button (click)="edit(employee.id)" class="btn btn-primary btn-text-primary">Edit</button></td>
+        <td><button (click)="delete(employee.id)" class="btn btn-primary text-red">Delete</button></td>
       </tr>
 
     </table>

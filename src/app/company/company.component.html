@@ -1,11 +1,44 @@
-<div class="text-center">
+<div class="text-center  m-2">
   <h1>Companies</h1>
 </div>
 
-<!-- <div [hidden]="hideEmployees" class="p-4"> -->
 <div class="p-4">
+
+  <div class="m-3" *ngIf="hideNew === false">
+    <form [formGroup]="addFrom" (ngSubmit)="add()" class="border p-3 rounded">
+      <div>
+        <div class="form-group">
+          <div class="form-group col-5">
+            <label for="">Name</label>
+            <input class="form-control" type="text" required formControlName="name" placeholder="name"
+              [ngClass]="{'is-invalid' : submitted && ctrl['name'].errors}">
+
+            <div class="invalid-feedback" *ngIf="submitted && ctrl['name'].errors">
+              <div *ngIf="ctrl['name'].errors['required']">
+                Name is required!
+              </div>
+
+              <div *ngIf="ctrl['name'].errors['minlength']">
+                Minimum Name length allowed is 3 char!
+              </div>
+
+              <div *ngIf="ctrl['name'].errors['maxlength']">
+                Maximum Name length allowed is 100 char!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary px-2 m-2" type="submit">{{buttonTxt}}</button>
+          <button class="btn btn-danger px-2" type="button" (click)="resetForm()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
   <div class="flex justify-right">
-    <button (click)="addComp()" class="btn btn-primary px-3 m-2">New</button>
+    <button (click)="hideNewForm()" class="btn btn-primary px-3 m-2">New</button>
   </div>
   <div>
     <input type="text" placeholder="search..." class="full-width-table rounded border-blue" style="height: 40px;">
@@ -19,12 +52,13 @@
         <th>Update</th>
         <th>Delete</th>
       </tr>
-      <tr *ngFor="let company of companyList; let i=index; let e = even;" class="border-botom py-4" [ngClass]="e? 'even': 'odd'">
+      <tr *ngFor="let company of companyList; let i=index; let e = even;" class="border-botom py-4"
+        [ngClass]="e? 'even': 'odd'">
         <td class="p-3">{{company.id }}</td>
         <td>{{company.name | uppercase}}</td>
         <td>{{company.regDate | date : 'short'}}</td>
-        <td><button (click)="editComp(company)" class="btn btn-primary btn-text-primary">Edit</button></td>
-        <td><button (click)="deleteComp(company.id)" class="btn btn-primary text-red">Delete</button></td>
+        <td><button (click)="edit(company.id)" class="btn btn-primary btn-text-primary">Edit</button></td>
+        <td><button (click)="delete(company.id)" class="btn btn-primary text-red">Delete</button></td>
       </tr>
 
     </table>

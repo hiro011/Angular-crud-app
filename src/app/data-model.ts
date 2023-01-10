@@ -1,6 +1,6 @@
 
 export interface EmployeeList {
-  Eid: number;
+  id: number;
   Ename: string;
   companyId: number;
   departmentId: number;
@@ -23,6 +23,6 @@ export interface DepartmentList {
 
 export interface SalaryList {
   id: number;
-  name: string;
+  amount: number;
   regDate: Date;
 }

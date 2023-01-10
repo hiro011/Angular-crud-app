@@ -1,11 +1,11 @@
-import { EmployeeList } from 'src/app/data-model';
+import { DBOperation } from './../db-operation';
+import { CompanyList, DepartmentList, SalaryList, EmployeeList } from './../data-model';
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService } from './services/employees.service';
 import { ViewService } from '../view.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
-// interface myData {
-//   obj: Object
-// }
 
 @Component({
   selector: 'app-employees',
@@ -14,28 +14,40 @@ import { ViewService } from '../view.service';
 })
 export class EmployeesComponent implements OnInit {
 
-  successAlert = false;
-  updateAlert = false;
-  deleteAlert = false;
-  hideNewEmp = true;
-  updateE = false;
+  hideNew = true;
+  indexId = 5;
+  submitted: boolean = false;
+  buttonTxt: string = '';
+  dbops: DBOperation;
 
-  employeeList1: EmployeeList[] = [];
-  employeeList: any[] = [];
-  companyList: any[] = [];
-  departmentList: any[] = [];
-  salaryList: any[] = [];
+
+  employeeList: EmployeeList[] = [];
+  companyList: CompanyList[] = [];
+  departmentList: DepartmentList[] = [];
+  salaryList: SalaryList[] = [];
+
+  addFrom: FormGroup;
 
   constructor(
     private viewService: ViewService,
     private employeesService: EmployeesService,
-    // private newEmloyee: NewEmployeeComponent,
+    private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
+    this.getData();
+    this.setFormState();
+  }
+
+  getEmployees() {
     this.viewService.getEmployees().subscribe((data: any) => {
+      console.log(data);
       this.employeeList = data;
     });
+  }
+
+  getData() {
+    this.getEmployees();
     this.viewService.getCompany().subscribe((data: any) => {
       this.companyList = data;
     });
@@ -47,59 +59,83 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  hideAlert() {
-    this.successAlert = false;
-    this.updateAlert = false;
-    this.deleteAlert = false;
+  setFormState() {
+    this.buttonTxt = 'Save';
+    this.dbops = DBOperation.add;
+
+    this.addFrom = new FormGroup({
+      id: new FormControl(this.indexId),
+      Ename: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])),
+      companyId: new FormControl(0, Validators.compose([Validators.required, Validators.min(1)])),
+      departmentId: new FormControl(0, Validators.compose([Validators.required, Validators.min(1)])),
+      salaryId: new FormControl(0, Validators.compose([Validators.required, Validators.min(1)])),
+      regDate: new FormControl(Date())
+    })
   }
 
-  newEmpForm() {
-    this.hideNewEmp = !this.hideNewEmp;
-    this.updateE = false;
+  hideNewForm() {
+    this.hideNew = !this.hideNew;
   }
 
-  newemp: EmployeeList = {
-    Eid: 0,
-    Ename: '',
-    companyId: 0,
-    departmentId: 0,
-    salaryId: 0,
-    regDate: new Date('07-jan-2023'),
-  };
+  get ctrl() {
+    return this.addFrom.controls
+  }
+
+  resetForm() {
+    this.submitted = false;
+    this.addFrom.reset();
+    this.addFrom.get('id')?.setValue(this.indexId)
+    this.addFrom.get('regDate')?.setValue(new Date())
+
+    this.buttonTxt = 'Save';
+    this.dbops = DBOperation.add;
+  }
 
   addEmp() {
-    // this.employeeList.push(emp);
-    
-    this.employeesService.creatEmployees(this.newemp)
-      .subscribe((ret) => {
-        console.log("ret data", ret)
-        this.employeeList = [...this.employeeList, ret];
-      })
-    this.successAlert = true
-    this.newEmpForm()
-  }
-  editEmp(emp: EmployeeList) {
+    this.submitted = true;
 
-    this.newemp = emp;
-    this.hideNewEmp = true;
-    this.updateE = true;
-  }
-  deleteEmp(id: number) {
-    this.employeesService.deleteEmployee(id)
-    .subscribe((ret)=>{
-      console.log("deleted ret: ", ret)
-    })
-    this.deleteAlert = true
-    // window.alert(id)
-  }
-  updateEmp() {
-    this.employeesService.updateEmployee(this.newemp)
-    .subscribe((ret)=>{
-      console.log("ret updated: ", ret)
-    })
+    if (this.addFrom.invalid) {
+      return;
+    }
 
-    // this.employeeList = [...this.employeeList, this.newemp];
-    this.updateAlert = true
-    this.newEmpForm()
+    switch (this.dbops) {
+      case DBOperation.add:
+        this.employeesService.creatEmployees(this.addFrom.value).subscribe(res => {
+          this.toastr.success("Employee Add!", "Data Adding");
+          console.log(this.addFrom.value);
+          this.getEmployees();
+          this.resetForm();
+          this.hideNew = true;
+          this.indexId++;
+        });
+        break;
+      case DBOperation.update:
+        this.employeesService.updateEmployee(this.addFrom.value).subscribe(res => {
+          this.toastr.success("Employee Updated!", "Data Updating");
+          this.getEmployees();
+          this.resetForm();
+          this.hideNew = true;
+        });
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  edit(id: number) {
+    this.buttonTxt = 'Update';
+    this.dbops = DBOperation.update;
+
+    let employee = this.employeeList.find((E: EmployeeList) => E.id === id);
+    this.addFrom.patchValue(employee!);
+    this.hideNew = false;
+  }
+
+  delete(id: number) {
+    this.employeesService.deleteEmployee(id).subscribe(res => {
+      this.toastr.warning('Deleted Success!', 'User Registration');
+      this.getEmployees();
+    })
   }
 }

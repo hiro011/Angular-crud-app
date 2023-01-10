@@ -1,26 +1,63 @@
-<div class="mat-elevation-z8">
-  <table mat-table class="full-width-table" matSort aria-label="Elements">
-    <!-- Id Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{row.id}}</td>
-    </ng-container>
+<div class="text-center m-2">
+  <h1>Salaries</h1>
+</div>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{row.name}}</td>
-    </ng-container>
+<div class="p-4">
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <div class="m-3" *ngIf="hideNew === false">
+    <form [formGroup]="addFrom" (ngSubmit)="add()" class="border p-3 rounded">
+      <div>
+        <div class="form-group">
+          <div class="form-group col-5">
+            <label for="">Amount</label>
+            <input class="form-control" type="number" required formControlName="amount" placeholder="amount"
+              [ngClass]="{'is-invalid' : submitted && ctrl['amount'].errors}">
 
-  <mat-paginator #paginator
-      [length]="dataSource?.data?.length"
-      [pageIndex]="0"
-      [pageSize]="5"
-      [pageSizeOptions]="[5, 10, 20]"
-      aria-label="Select page">
-  </mat-paginator>
+            <div class="invalid-feedback" *ngIf="submitted && ctrl['amount'].errors">
+              <div *ngIf="ctrl['amount'].errors['required']">
+                Amount is required!
+              </div>
+
+              <div *ngIf="ctrl['amount'].errors['min']">
+                Minimum amount allowed is 0!
+              </div> 
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-primary px-2 m-2" type="submit">{{buttonTxt}}</button>
+          <button class="btn btn-danger px-2" type="button" (click)="resetForm()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-right">
+    <button (click)="hideNewForm()" class="btn btn-primary px-3 m-2">New</button>
+  </div>
+  <div>
+    <input type="text" placeholder="search..." class="full-width-table rounded border-blue" style="height: 40px;">
+  </div>
+  <div class="border rounded shadow" style="overflow: auto;">
+    <table class="full-width-table table">
+      <tr class="border-botom">
+        <th class="p-4">Id</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      <tr *ngFor="let salary of salaryList; let i=index; let e = even;" class="border-botom py-4"
+        [ngClass]="e? 'even': 'odd'">
+        <td class="p-3">{{salary.id }}</td>
+        <td>{{salary.amount | currency}}</td>
+        <td>{{salary.regDate | date : 'short'}}</td>
+        <td><button (click)="edit(salary.id)" class="btn btn-primary btn-text-primary">Edit</button></td>
+        <td><button (click)="delete(salary.id)" class="btn btn-primary text-red">Delete</button></td>
+      </tr>
+
+    </table>
+
+  </div>
 </div>
