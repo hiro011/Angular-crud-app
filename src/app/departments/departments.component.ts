@@ -12,7 +12,7 @@ import { DBOperation } from '../db-operation';
   styleUrls: ['./departments.component.scss']
 })
 export class DepartmentsComponent {
- 
+
   hideNew = true;
   indexId = 7;
   submitted: boolean = false;
@@ -43,7 +43,7 @@ export class DepartmentsComponent {
     });
   }
 
-  getData(){
+  getData() {
     this.viewService.getCompany().subscribe((data: any) => {
       console.log(data);
       this.companyList = data;
@@ -122,9 +122,13 @@ export class DepartmentsComponent {
   }
 
   delete(id: number) {
-    this.departmentService.deleteDepartment(id).subscribe(res => {
-      this.toastr.warning('Deleted Success!', 'User Registration');
-      this.getDepartment();
-    })
+    if (confirm("Do you want to delete?") === true) {
+      this.departmentService.deleteDepartment(id).subscribe(res => {
+        this.toastr.warning('Deleted Success!', 'User Registration');
+        this.getDepartment();
+      })
+    } else {
+      this.toastr.info('Delete cancelled!', 'User Registration');
+    }
   }
 }

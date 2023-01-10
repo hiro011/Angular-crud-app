@@ -7,6 +7,8 @@
   <div class="m-3" *ngIf="hideNew === false">
     <form [formGroup]="addFrom" (ngSubmit)="add()" class="border p-3 rounded">
       <div>
+        <h1 *ngIf="buttonTxt === 'Save'"> Add new company</h1>
+        <h1 *ngIf="buttonTxt === 'Update'"> Update company</h1>
         <div class="form-group">
           <div class="form-group col-5">
             <label for="">Name</label>

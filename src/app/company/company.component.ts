@@ -113,9 +113,13 @@ export class CompanyComponent {
   }
 
   delete(id: number) {
-    this.companyService.deleteCompany(id).subscribe(res => {
-      this.toastr.warning('Deleted Success!', 'User Registration');
-      this.getCompany();
-    })
+    if (confirm("Do you want to delete?") === true) {
+      this.companyService.deleteCompany(id).subscribe(res => {
+        this.toastr.warning('Deleted Success!', 'User Registration');
+        this.getCompany();
+      })
+    } else {
+      this.toastr.info('Delete cancelled!', 'User Registration');
+    }
   }
 }

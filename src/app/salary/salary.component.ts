@@ -112,9 +112,13 @@ export class SalaryComponent {
   }
 
   delete(id: number) {
-    this.salaryService.deleteSalary(id).subscribe(res => {
-      this.toastr.warning('Deleted Success!', 'User Registration');
-      this.getSalary();
-    })
+    if (confirm("Do you want to delete?") === true) {
+      this.salaryService.deleteSalary(id).subscribe(res => {
+        this.toastr.warning('Deleted Success!', 'User Registration');
+        this.getSalary();
+      })
+    } else {
+      this.toastr.info('Delete cancelled!', 'User Registration');
+    }
   }
 }

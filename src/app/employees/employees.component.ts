@@ -39,15 +39,11 @@ export class EmployeesComponent implements OnInit {
     this.setFormState();
   }
 
-  getEmployees() {
+  getData() {
     this.viewService.getEmployees().subscribe((data: any) => {
       console.log(data);
       this.employeeList = data;
     });
-  }
-
-  getData() {
-    this.getEmployees();
     this.viewService.getCompany().subscribe((data: any) => {
       this.companyList = data;
     });
@@ -103,7 +99,7 @@ export class EmployeesComponent implements OnInit {
         this.employeesService.creatEmployees(this.addFrom.value).subscribe(res => {
           this.toastr.success("Employee Add!", "Data Adding");
           console.log(this.addFrom.value);
-          this.getEmployees();
+          this.getData();
           this.resetForm();
           this.hideNew = true;
           this.indexId++;
@@ -112,7 +108,7 @@ export class EmployeesComponent implements OnInit {
       case DBOperation.update:
         this.employeesService.updateEmployee(this.addFrom.value).subscribe(res => {
           this.toastr.success("Employee Updated!", "Data Updating");
-          this.getEmployees();
+          this.getData();
           this.resetForm();
           this.hideNew = true;
         });
@@ -133,9 +129,13 @@ export class EmployeesComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.employeesService.deleteEmployee(id).subscribe(res => {
-      this.toastr.warning('Deleted Success!', 'User Registration');
-      this.getEmployees();
-    })
+    if (confirm("Do you want to delete?") === true) {
+      this.employeesService.deleteEmployee(id).subscribe(res => {
+        this.toastr.warning('Deleted Success!', 'User Registration');
+        this.getData();
+      })
+    } else {
+      this.toastr.info('Delete cancelled!', 'User Registration');
+    }
   }
 }

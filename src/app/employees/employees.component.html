@@ -7,24 +7,10 @@
   <div class="m-3" *ngIf="hideNew === false">
     <form [formGroup]="addFrom" (ngSubmit)="addEmp()" class="border p-3 rounded">
       <div>
+        <h1 *ngIf="buttonTxt === 'Save'"> Add new employee</h1>
+        <h1 *ngIf="buttonTxt === 'Update'"> Update employee</h1>
         <div class="form-group">
           <div class="row">
-            <!-- <div class="form-group col-5">
-              <label for="">ID</label>
-              <input type="number" class="form-control" required formControlName="id" placeholder="id"
-                [ngClass]="{'is-invalid' : submitted && ctrl['id'].errors}">
-
-              <div class="invalid-feedback" *ngIf="submitted && ctrl['id'].errors">
-                <div *ngIf="ctrl['id'].errors['required']">
-                  id is required!
-                </div>
-
-                <div *ngIf="ctrl['id'].errors['min']">
-                  Minimum id is 1!
-                </div>
-              </div>
-            </div> -->
-
             <div class="form-group col-5">
               <label for="">Name</label>
               <input class="form-control" type="text" required formControlName="Ename" placeholder="name"
